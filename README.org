@@ -1,0 +1,149 @@
+#+title: Automate Meta WIP Category
+#+PROJECT_ID: SYS.02.02
+#+STATUS: active
+#+URGENCY: high
+#+INTEREST: high
+#+ENERGY_REQUIRED: medium
+#+LOCATION_REQUIRED: home_office
+#+TECH_REQUIRED: asus-endeavour
+#+ESTIMATED_TIME: 40 hours
+#+DIFFICULTY: medium
+#+DEPENDENCIES:
+#+TAGS: automation, project_management, adhd, autism, prioritization, executive dysfunction
+
+* SYS.02.02 Automate Meta WIP Category
+** Project Overview
+This project aims to develop a Python-based automation system for the *SYS.02.02 Meta WIP Category.* The system will help manage, prioritize, and optimize active projects based on various factors and daily conditions.
+We will follow @simonw's *perfect commit* strategy, emphasizing test-driven development (TDD) and continuous documentation throughout the process.
+** Goals
+1. *Develop* a script to automate project sorting and prioritization
+2. *Implement* a daily optimization routine
+3. *Create* a standardized project README structure with frontmatter
+4. *Integrate* with an LLM for context-aware project suggestions
+5. *Implement* file organization and syncing between SYS.02.00 (Meta WIP Capture) and project-specific directories
+6. *Ensure* comprehensive test coverage and up-to-date documentation
+** Project Structure
+#+begin_src
+.
+├── SYS.02.00
+│   ├── generate-readme.sh
+│   ├── README.org
+│   ├── SYS.02.00-README.md
+│   ├── SYS.02.00-README.org
+│   ├── SYS.02.01-README.org
+│   ├── SYS.02.02-README.org
+│   ├── ...
+│   └── SYS.02.99-README.org
+├── SYS.02.01
+│   └── ...
+└── SYS.02.02 # THIS PROJECT
+    ├── CHANGELOG.org
+    ├── data
+    │   └── project_templates
+    │       └── README_template.org
+    ├── docs
+    │   ├── api
+    │   ├── development
+    │   └── user_guide
+    ├── LICENSE
+    ├── requirements.txt
+    ├── src
+    │   ├── file_sync.py
+    │   ├── __init__.py
+    │   ├── llm_integration.py
+    │   ├── main.py
+    │   ├── project_sorter.py
+    │   └── utils.py
+    ├── SYS.02.02-README.org # THIS FILE
+    └── tests
+        ├── __init__.py
+        ├── test_file_sync.py
+        ├── test_llm_integration.py
+        └── test_project_sorter.py
+
+#+end_src
+** Development Strategy
+We will follow @simonw's *perfect commit* strategy, which emphasizes small, focused commits that include both tests and documentation. Each feature or change will be developed using the following steps:
+1. Write a *failing test* for the new feature or change
+2. Implement the *minimum code necessary* to make the test pass
+3. *Refactor the code* if needed, ensuring tests still pass
+4. Update or add *relevant documentation*
+5. Commit the changes with a *clear, descriptive message*
+This approach ensures that our project maintains high test coverage and up-to-date documentation throughout the development process.
+** Implementation Plan
+*** Feature 1: Project Setup and Basic Functionality
+1. *Set up* the project structure and version control
+   - *Test:* Verify project structure and version control
+   - *Doc:* README setup and project overview
+2. *Create* a basic CLI interface for the script
+   - *Test:* CLI argument parsing and basic functionality
+   - *Doc:* CLI usage instructions
+3. *Implement* project README parsing and frontmatter extraction
+   - *Test:* Parsing various README formats and extracting frontmatter
+   - *Doc:* README format specifications and frontmatter schema
+4. *Develop* a simple sorting algorithm based on frontmatter tags
+   - *Test:* Sorting projects based on different frontmatter combinations
+   - *Doc:* Sorting algorithm explanation and usage
+*** Feature 2: File Organization and Syncing
+1. *Implement* creation of project-specific directories
+   - *Test:* Directory creation for new projects
+   - *Doc:* Project directory structure guidelines
+2. *Develop* README generation/updating in both locations
+   - *Test:* README creation and updating in both SYS.02.00 and project directories
+   - *Doc:* README synchronization process
+3. *Implement* syncing mechanism (symlinks or file synchronization)
+   - *Test:* Syncing changes between README copies
+   - *Doc:* Sync mechanism explanation and troubleshooting
+*** Feature 3: Advanced Sorting and Prioritization
+1. *Enhance* the sorting algorithm to consider multiple factors
+   - *Test:* Complex sorting scenarios with multiple factors
+   - *Doc:* Advanced sorting options and factor definitions
+2. *Implement* weighting system for different prioritization factors
+   - *Test:* Sorting with different weight configurations
+   - *Doc:* Weight configuration guide and best practices
+3. *Create* a configuration file for customizing factor weights
+   - *Test:* Loading and applying custom configurations
+   - *Doc:* Configuration file format and options
+4. *Develop* a system for handling project dependencies
+   - *Test:* Sorting with various dependency scenarios
+   - *Doc:* Defining and managing project dependencies
+*** Feature 4: Daily Optimization Routine
+1. *Create* a user input system for daily context (schedule, energy levels, etc.)
+   - *Test:* Various user input scenarios and validation
+   - *Doc:* Daily input guide and available options
+2. *Implement* a daily optimization algorithm that considers user input
+   - *Test:* Optimization results for different daily contexts
+   - *Doc:* Optimization algorithm explanation and interpretation of results
+3. *Develop* a method to rearrange project IDs based on optimization results
+   - *Test:* Project ID rearrangement for various optimization outputs
+   - *Doc:* Project ID structure and rearrangement process
+*** Feature 5: LLM Integration
+1. *Implement* LLM API integration
+   - *Test:* API connection and basic query functionality
+   - *Doc:* LLM integration setup and API usage
+2. *Develop* prompts for context-aware project suggestions
+   - *Test:* LLM responses for various projects and daily contexts
+   - *Doc:* Prompt design and customization guide
+3. *Create* caching system to reduce API calls
+   - *Test:* Cache hit/miss scenarios and performance improvement
+   - *Doc:* Caching system explanation and configuration
+*** Feature 6: Deployment and Maintenance
+1. *Set up* installation process
+   - *Test:* Installation on various systems and environments
+   - *Doc:* Installation guide and requirements
+2. *Implement* logging for debugging and monitoring
+   - *Test:* Log generation for various scenarios and log levels
+   - *Doc:* Logging configuration and log analysis guide
+3. *Create* backup and restore system for project data
+   - *Test:* Backup creation, integrity, and restoration
+   - *Doc:* Backup and restore procedures
+** Getting Started
+(To be filled in as development progresses)
+** Usage
+(To be filled in as development progresses)
+** Contributing
+(To be filled in as development progresses)
+** License
+This project is licensed under the *GNU General Public License (GPL v3)* - see the LICENSE file for details.
+** Changelog
+See CHANGELOG.org for a detailed history of changes to this project.
