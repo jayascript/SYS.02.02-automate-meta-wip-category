@@ -47,5 +47,45 @@ class TestCLI(unittest.TestCase):
         self.assertEqual(cm.exception.code, 0)
 
 
+    def test_cli_invalid_option(self):
+        """
+        Test the CLI's handling of invalid options.
+
+        This test verifies that the CLI correctly handles and reports errors
+        when an invalid option is provided.
+
+        Raises:
+            SystemExit: Expected to be raised when an invalid option is provided
+        """
+        # Simulate calling the script with an invalid option
+        with self.assertRaises(SystemExit) as cm:
+            sys.argv = ['main.py', '--invalid-option']
+            main()
+
+        # Check that SystemExit is called with exit code 2 (command line syntax errors)
+        self.assertEqual(cm.exception.code, 2)
+
+
+        @patch('sys.stdout', new_callable=StringIO)
+        def test_cli_valid_option(self, mock_stdout):
+            """
+            Test the CLI's handling of a valid option.
+
+            This test checks that the CLI correctly processes a valid option
+            (in this case, a hypothetical --sort option) and produces the
+            expected output.
+
+            Args:
+                mock_stdout (StringIO): A mock object to capture system output.
+            """
+            # Simulate calling the script with a valid option
+            sys.argv = ['main.py', '--sort']
+            main()
+
+            # Check that the expected output is produced
+            output = mock_stdout.getvalue().strip()
+            self.assertIn('Sorting projects', output)
+
+
 if __name__ == '__main__':
     unittest.main()
