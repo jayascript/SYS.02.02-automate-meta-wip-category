@@ -66,25 +66,25 @@ class TestCLI(unittest.TestCase):
         self.assertEqual(cm.exception.code, 2)
 
 
-        @patch('sys.stdout', new_callable=StringIO)
-        def test_cli_valid_option(self, mock_stdout):
-            """
-            Test the CLI's handling of a valid option.
+    @patch('sys.stdout', new_callable=StringIO)
+    def test_cli_valid_option(self, mock_stdout):
+        """
+        Test the CLI's handling of a valid option.
 
-            This test checks that the CLI correctly processes a valid option
-            (in this case, a hypothetical --sort option) and produces the
-            expected output.
+        This test checks that the CLI correctly processes a valid option
+        (in this case, a hypothetical --sort option) and produces the
+        expected output.
 
-            Args:
-                mock_stdout (StringIO): A mock object to capture system output.
-            """
-            # Simulate calling the script with a valid option
-            sys.argv = ['main.py', '--sort']
-            main()
+        Args:
+            mock_stdout (StringIO): A mock object to capture system output.
+        """
+        # Simulate calling the script with a valid option
+        sys.argv = ['main.py', '--sort']
+        main()
 
-            # Check that the expected output is produced
-            output = mock_stdout.getvalue().strip()
-            self.assertIn('Sorting projects', output)
+        # Check that the expected output is produced
+        output = mock_stdout.getvalue().strip()
+        self.assertIn('Sorting projects', output)
 
 
 if __name__ == '__main__':
