@@ -1,13 +1,13 @@
 #+title: Automate Meta WIP Category
 #+PROJECT_ID: SYS.02.02
 #+STATUS: active
-#+URGENCY: high
-#+INTEREST: high
-#+ENERGY_REQUIRED: medium
+#+URGENCY: now
+#+INTEREST: engaged
+#+ACCOUNTABILITY: off-radar
+#+TIME_DISTORTION: warp
+#+EFFORT: flow
 #+LOCATION_REQUIRED: home_office
 #+TECH_REQUIRED: asus-endeavour
-#+ESTIMATED_TIME: 40 hours
-#+DIFFICULTY: medium
 #+DEPENDENCIES:
 #+TAGS: automation, project_management, adhd, autism, prioritization, executive dysfunction
 
