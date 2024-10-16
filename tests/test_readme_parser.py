@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import pytest
+import tempfile
+import os
 from src.readme_parser import parse_readme, extract_frontmatter
 
 
@@ -20,27 +22,21 @@ def test_parse_readme():
     #+title: Sample Project
     #+PROJECT_ID: SYS.00.00
     #+STATUS: active
-    #+URGENCY: high
-    #+INTEREST: high
-    #+ENERGY_REQUIRED: medium
-    #+LOCATION_REQUIRED: home_office
-    #+TECH_REQUIRED: asus-endeavour
-    #+ESTIMATED_TIME: 10 HOURS
-    #+DIFFICULTY: medium
-    #+DEPENDENCIES:
-    #+TAGS: sample, test
-
     * SYS.00.00 Sample Project
     ** Project Overview
     This is a sample project for testing purposes.
-    ** Goals
-    1. Test README parsing
-    2. Verify frontmatter extraction
     """
-    result = parse_readme(sample_content)
-    assert isinstance(result, str)
-    assert "Project Overview" in results
-    assert "Goals" in result
+    with tempfile.NamedTemporaryFile(mode='w+', delete=False) as temp_file:
+        temp_file.write(sample_content)
+        temp_file_path = temp_file.name
+
+    try:
+        result = parse_readme(temp_file_path)
+        assert isinstance(result, str)
+        assert "Sample Project" in result
+        assert "Project Overview" in result
+    finally:
+        os.unlink(temp_file_path)
 
 
 def test_extract_frontmatter():
@@ -53,19 +49,19 @@ def test_extract_frontmatter():
         3. The values of the extracted fields are of the correct type and format.
 
     The test allows for some flexibility in the exact format of certain fields,
-    such as ESTIMATED_TIME, to account for variations in README structures.
+    to account for variations in README structures.
     """
     sample_content = """
     #+title: Sample Project
     #+PROJECT_ID: SYS.00.00
+    #+URGENCY: now
     #+STATUS: active
-    #+URGENCY: high
-    #+INTEREST: high
-    #+ENERGY_REQUIRED: medium
+    #+INTEREST: sparking
+    #+ACCOUNTABILITY: imminent
+    #+TIME_DISTORTION: balloon
     #+LOCATION_REQUIRED: home_office
+    #+EFFORT: push
     #+TECH_REQUIRED: asus-endeavour
-    #+ESTIMATED_TIME: 10 HOURS
-    #+DIFFICULTY: medium
     #+DEPENDENCIES:
     #+TAGS: sample, test
 
@@ -78,10 +74,12 @@ def test_extract_frontmatter():
     """
     frontmatter = extract_frontmatter(sample_content)
     assert isinstance(frontmatter, dict)
+    print(frontmatter)
+    assert frontmatter['STATUS'] in ['active', 'stuck', 'waiting', 'done']
     assert frontmatter['title'] == 'Sample Project'
     assert frontmatter['PROJECT_ID'] == 'SYS.00.00'
-    assert frontmatter['STATUS'] in ['active', 'stuck', 'waiting', 'done']
     assert frontmatter['URGENCY'] in ['now', 'soon', 'later', 'ignore']
+    assert frontmatter['STATUS'] in ['active', 'stuck', 'waiting', 'done']
     assert frontmatter['INTEREST'] in ['engaged', 'sparking', 'avoiding']
     assert frontmatter['ACCOUNTABILITY'] in ['imminent', 'looming', 'distant', 'off-radar']
     assert frontmatter['TIME_DISTORTION'] in ['balloon', 'blink', 'warp', 'linear']
