@@ -50,7 +50,29 @@ Frontmatter Fields and Values:
         - "impossible" : Feels like a brick wall; avoid until last possible sec.
 
 For more detailed information on frontmatter fields and their usage,
-please refer to the frontmatter_guide.md (#TODO) in the docs directory.
+please refer to the frontmatter_guide.md in the docs directory.
+
+Recurrence Fields (Optional):
+These fields are used to handle recurring tasks and their priorities:
+
+    7. RECURRENCE_INTERVAL:
+        - Number of days between recurrences
+        - Example: "30" for monthly tasks
+        - Required for recurring projects
+
+    8. LAST_COMPLETED:
+        - Date of last task completion
+        - Format: YYYY-MM-DD
+        - Required for recurring projects
+        - Used to calculate next due date
+
+    9. RECURRENCE_TYPE:
+        - Optional descriptor of recurrence pattern
+        - Examples: "monthly", "weekly"
+        - Used for documentation; not used in priority calculations
+
+For more detailed information on recurrence fields and their usage,
+please refer to the recurrence_guide.md in the docs directory.
 """
 import re
 from collections import defaultdict

@@ -120,6 +120,59 @@ def test_extract_frontmatter_missing_fields():
     assert 'INTEREST' not in frontmatter
 
 
+def test_extract_frontmatter_recurring_project():
+    """
+    Test that extract_frontmatter correctly handles recurring project fields.
+
+    This test verifies that:
+        1. Recurrence-related fields are properly extracted
+        2. Date format is correctly preserved
+        3. Interval values are properly handled
+    """
+    sample_content = """
+    #+title: Monthly BPR Metrics Report
+    #+PROJECT_ID: WVN.41.10
+    #+STATUS: active
+    #+URGENCY: soon
+    #+RECURRENCE_INTERVAL: 30
+    #+LAST_COMPLETED: 2024-10-01
+    #+RECURRENCE_TYPE: monthly
+
+    * WVN.41.10 Monthly BPR Metrics
+    """
+    frontmatter = extract_frontmatter(sample_content)
+    assert 'RECURRENCE_INTERVAL' in frontmatter
+    assert frontmatter['RECURRENCE_INTERVAL'] == '30'
+    assert 'LAST_COMPLETED' in frontmatter
+    assert frontmatter['LAST_COMPLETED'] == '2024-10-01'
+    assert 'RECURRENCE_TYPE' in frontmatter
+    assert frontmatter['RECURRENCE_TYPE'] == 'monthly'
+
+
+def test_extract_frontmatter_non_recurring_project():
+    """
+    Test that extract_frontmatter works correctly for non-recurring projects.
+
+    This test ensures that:
+        1. Non-recurring projects work without recurrence fields
+        2. The absence of recurrence fields doesn't affect other frontmatter
+    """
+    sample_content="""
+    #+title: One-Time Analytics Report
+    #+PROJECT_ID: WVN.62.08
+    #+STATUS: active
+    #+URGENCY: soon
+
+    * WVN.62.08 Analytics Report
+    """
+    frontmatter = extract_frontmatter(sample_content)
+    assert 'RECURRENCE_INTERVAL' not in frontmatter
+    assert 'LAST_COMPLETED' not in frontmatter
+    assert 'RECURRENCE_TYPE' not in frontmatter
+    assert frontmatter['title'] == 'One-Time Analytics Report'
+    assert frontmatter['STATUS'] == 'active'
+
+
 def test_parse_readme_file_not_found():
     """
     Test that parse_readme raises a FileNotFoundError for non-existent files.

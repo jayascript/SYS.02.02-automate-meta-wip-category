@@ -19,6 +19,8 @@ theme:
     - navigation.sections
     - navigation.tabs
     - navigation.top
+    - navigation.expand    # Shows the full navigation tree
+    - navigation.indexes   # Allows index page for sections
     - search.highlight
     - search.suggest
 
@@ -27,6 +29,8 @@ nav:
   - User Guide:
     - Getting Started: user_guide/getting_started.md
     - Project Structure: user_guide/project_structure.md
+    - Frontmatter Fields: user_guide/frontmatter_guide.md
+    - Recurrence Handling: user_guide/recurrence_guide.md
     - README Format: user_guide/readme_format.md
   - Priority System:
     - Overview: priority/overview.md
