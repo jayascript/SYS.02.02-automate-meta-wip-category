@@ -1,0 +1,14 @@
+#+title: Weekly System Backup
+#+PROJECT_ID: SYS.03.01
+#+STATUS: active
+#+URGENCY: now
+#+INTEREST: avoiding
+#+ACCOUNTABILITY: imminent
+#+TIME_DISTORTION: blink
+#+EFFORT: push
+#+RECURRENCE_INTERVAL: 7
+#+LAST_COMPLETED: 2024-02-01
+#+RECURRENCE_TYPE: weekly
+#+LOCATION_REQUIRED: home_office
+#+TECH_REQUIRED: asus-endeavour
+#+TAGS: maintenance, backup

@@ -7,5 +7,8 @@
 #+TIME_DISTORTION: linear
 #+EFFORT: push
 #+RECURRENCE_INTERVAL: 30
-#+LAST_COMPLETED: 2024-03-01
+#+LAST_COMPLETED: 2024-02-20
 #+RECURRENCE_TYPE: monthly
+#+LOCATION_REQUIRED: home_office
+#+TECH_REQUIRED: work-laptop
+#+TAGS: reporting, metrics

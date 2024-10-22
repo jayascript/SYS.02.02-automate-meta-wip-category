@@ -6,4 +6,7 @@
 #+ACCOUNTABILITY: imminent
 #+TIME_DISTORTION: balloon
 #+EFFORT: resist
+#+LOCATION_REQUIRED: home_office
+#+TECH_REQUIRED: asus-endeavour
 #+DEPENDENCIES: WVN.62.07
+#+TAGS: analytics, visualization
