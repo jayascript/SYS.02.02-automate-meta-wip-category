@@ -1,0 +1,15 @@
+#+title: CHANGELOG
+
+* v0.1.0 - 2024-10-22
+** Features
+- Project structure and version control setup
+- Basic CLI interface with file processing
+- README parsing with frontmatter extraction
+- Neurodivergent-friendly project sorting algorithm
+- Support for recurring and one-time projects
+- Documentation for frontmatter, priority weights and scoring
+- Test coverage at 94%
+** Known Limitations
+- Full directory structure support pending (currently process files in single directory)
+- File syncing between SYS.02.00 and project directories not yet implemented
+- Advanced sorting and daily optimization features planned for future releases
