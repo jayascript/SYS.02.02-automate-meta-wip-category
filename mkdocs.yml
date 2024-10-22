@@ -1,0 +1,56 @@
+# mkdocs.yml
+site_name: Automate Meta WIP Category
+site_description: Documentation for neurodivergent-friendly project automation system
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/lightbulb
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.sections
+    - navigation.tabs
+    - navigation.top
+    - search.highlight
+    - search.suggest
+
+nav:
+  - Home: index.md
+  - User Guide:
+    - Getting Started: user_guide/getting_started.md
+    - Project Structure: user_guide/project_structure.md
+    - README Format: user_guide/readme_format.md
+  - Priority System:
+    - Overview: priority/overview.md
+    - Factor Weights: priority/weights.md
+    - Scoring Logic: priority/scoring.md
+    - Neurodivergent Considerations: priority/neurodivergent_considerations.md
+  - Development:
+    - Setup: development/setup.md
+    - Contributing: development/contributing.md
+    - Testing: development/testing.md
+  - API Reference:
+    - Project Sorter: api/project_sorter.md
+    - README Parser: api/readme_parser.md
+    - File Sync: api/file_sync.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - tables
+  - footnotes
+  - attr_list
+
+plugins:
+  - search
+  - tags
