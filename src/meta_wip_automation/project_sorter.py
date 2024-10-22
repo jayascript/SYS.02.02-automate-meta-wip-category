@@ -60,21 +60,96 @@ URGENCY_SCORES = {
 }
 
 def get_recurrence_score(last_completed: datetime, recurrence_interval: int) -> int:
-    """Calculate recurrence priority score.
+    """
+    Calculate recurrence score based on last completion time and interval.
 
     Args:
-        last_completed: Date of last completion
-        recurrence_interval: Days between recurrences
+        last_completed: DateTime of last task completion
+        recurrence_interval: Number of days between recurrences
 
     Returns:
-        0: Recently completed
-        2: Due soon (≥75% of interval elapsed)
-        3: Overdue (≥100% of interval elapsed)
+        int: Score (3 for overdue, 2 for due soon, 0 for recently completed)
     """
     days_since_completed = (datetime.now() - last_completed).days
-
     if days_since_completed >= recurrence_interval:
         return 3  # Overdue
     elif days_since_completed >= (recurrence_interval * 0.75):
         return 2  # Due soon
     return 0  # Recently completed
+
+def calculate_priority(frontmatter: dict, last_completed: datetime = None,
+                     recurrence_interval: int = None) -> float:
+    """
+    Calculate priority score for a project based on its frontmatter.
+
+    Args:
+        frontmatter: Dictionary of project frontmatter
+        last_completed: Optional datetime of last completion
+        recurrence_interval: Optional interval for recurring tasks
+
+    Returns:
+        float: Priority score
+    """
+    # Return 0 priority for completed projects
+    if frontmatter.get('STATUS') == 'done':
+        return 0
+
+    # Get base scores with defaults for missing values
+    accountability_score = ACCOUNTABILITY_SCORES.get(
+        frontmatter.get('ACCOUNTABILITY', 'off-radar'), 0)
+    status_score = STATUS_SCORES.get(
+        frontmatter.get('STATUS', 'active'), 0)
+    time_distortion_score = TIME_DISTORTION_SCORES.get(
+        frontmatter.get('TIME_DISTORTION', 'linear'), 0)
+    effort_score = EFFORT_SCORES.get(
+        frontmatter.get('EFFORT', 'push'), 0)
+    interest_score = INTEREST_SCORES.get(
+        frontmatter.get('INTEREST', 'sparking'), 0)
+    urgency_score = URGENCY_SCORES.get(
+        frontmatter.get('URGENCY', 'later'), 0)
+
+    # Calculate recurrence score if applicable
+    recurrence_score = 0
+    if last_completed and recurrence_interval:
+        recurrence_score = get_recurrence_score(last_completed, recurrence_interval)
+
+    # Calculate base priority score using correct weights
+    priority_score = (
+        (5 * accountability_score) +    # Accountability weight: 5
+        (4 * status_score) +           # Status weight: 4
+        (3 * time_distortion_score) +  # Time distortion weight: 3
+        (3 * effort_score) +           # Effort weight: 3
+        (2 * interest_score) +         # Interest weight: 2
+        (2 * recurrence_score) +       # Recurrence weight: 2
+        (1 * urgency_score)            # Urgency weight: 1
+    )
+
+    # Apply interaction effect boosts
+    if accountability_score >= 2 and status_score == 3:  # Stuck + High Accountability
+        priority_score += 5
+
+    if (time_distortion_score == 3 and  # Quick win (blink)
+        effort_score >= 2):             # Hard to start (impossible/resist)
+        priority_score += 3
+
+    if (interest_score == 3 and         # Avoiding
+        accountability_score >= 2):     # Imminent/Looming accountability
+        priority_score += 4
+
+    return priority_score
+
+def sort_projects(projects: list) -> list:
+    """
+    Sort a list of projects based on their priority scores.
+
+    Args:
+        projects: List of tuples (frontmatter, last_completed, recurrence_interval)
+
+    Returns:
+        list: Sorted projects in descending priority order
+    """
+    def get_project_score(project):
+        frontmatter, last_completed, recurrence_interval = project
+        return calculate_priority(frontmatter, last_completed, recurrence_interval)
+
+    return sorted(projects, key=get_project_score, reverse=True)

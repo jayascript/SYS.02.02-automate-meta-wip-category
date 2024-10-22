@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from meta_wip_automation.project_sorter import (
     calculate_priority,
     get_recurrence_score,
+    sort_projects,
     ACCOUNTABILITY_SCORES,
     STATUS_SCORES,
     TIME_DISTORTION_SCORES,
@@ -117,6 +118,95 @@ class TestProjectSorter(unittest.TestCase):
         }
         score = calculate_priority(frontmatter)
         self.assertEqual(score, 0)
+
+
+    def test_recurrence_conditions(self):
+        """Test all combinations of recurrence parameters."""
+        from datetime import datetime, timedelta
+
+        frontmatter = {
+            'STATUS': 'active',
+            'ACCOUNTABILITY': 'looming',
+            'TIME_DISTORTION': 'linear',
+            'EFFORT': 'push',
+            'INTEREST': 'sparking',
+            'URGENCY': 'soon'
+        }
+
+        now = datetime.now()
+
+        # Test all combinations:
+        # 1. Both None
+        score1 = calculate_priority(frontmatter, None, None)
+
+        # 2. Only last_completed provided
+        score2 = calculate_priority(frontmatter, now - timedelta(days=5), None)
+
+        # 3. Only interval provided
+        score3 = calculate_priority(frontmatter, None, 30)
+
+        # 4. Both provided - use overdue scenario to ensure different score
+        score4 = calculate_priority(
+            frontmatter,
+            now - timedelta(days=31), # More than 30 days ago
+            30 # 30 day interval
+            )
+
+        # All scores should be valid
+        assert score1 >= 0
+        assert score2 >= 0
+        assert score3 >= 0
+        assert score4 >= 0
+
+        # Score4 should be different because it's the only one that
+        # should trigger the recurrence calculation
+        # Score4 should be higher because it includes recurrence score for overdue
+        assert score4 != score1
+
+
+    def test_avoiding_high_accountability_boost(self):
+        """Test the priority boost for avoided tasks with high accountability."""
+        frontmatter = {
+            'STATUS': 'active',
+            'ACCOUNTABILITY': 'imminent', # High accountability (score >=2)
+            'TIME_DISTORTION': 'linear',
+            'EFFORT': 'push',
+            'INTEREST': 'avoiding', # Avoiding (score == 3)
+            'URGENCY': 'soon'
+        }
+        # Trigger avoiding + high accountability boost
+        score1 = calculate_priority(frontmatter)
+
+        # Compare with same frontmatter but lower accountability
+        frontmatter['ACCOUNTABILITY'] = 'distant'
+        score2 = calculate_priority(frontmatter)
+
+        assert score1 > score2 + 3 # Should be higher by at least the boost amount
+
+
+    def test_sort_projects_basic(self):
+        """Test basic project sorting functionality."""
+        # project1 score: (5 x 'imminent') + (4 x 'stuck') + (1 x 'now')
+        # project1 score: (5 x 3) + (4 x 3) + (1 x 3) = 15 + 12 + 3 = 30
+        project1 = ({
+            'STATUS': 'stuck',
+            'ACCOUNTABILITY': 'imminent',
+            'URGENCY': 'now'
+        }, None, None)
+
+        # project2 score: (5 x 'distant') + (4 x 'active') + (1 x 'later')
+        # project2 score: (5 x 1) + (4 x 1) + (1 x 1) = 5 + 4 + 1 = 10
+        project2 = ({
+            'STATUS': 'active',
+            'ACCOUNTABILITY': 'distant',
+            'URGENCY': 'later'
+        }, None, None)
+
+        projects = [project2, project1] # Intentionally out of order
+        sorted_projects = sort_projects(projects)
+
+        assert sorted_projects[0] == project1 # Higher priority should be first
+        assert sorted_projects[1] == project2
 
 
 if __name__ == '__main__':
