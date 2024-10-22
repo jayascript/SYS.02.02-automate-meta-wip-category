@@ -6,7 +6,7 @@ import sys
 from io import StringIO
 
 
-from src.main import main # Assuming your main CLI function is in src/main.py
+from meta_wip_automation.main import main # Assuming your main CLI function is in <package_name>/main.py
 
 
 class TestCLI(unittest.TestCase):

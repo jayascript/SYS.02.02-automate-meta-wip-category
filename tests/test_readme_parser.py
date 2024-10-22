@@ -3,7 +3,7 @@
 import pytest
 import tempfile
 import os
-from src.readme_parser import parse_readme, extract_frontmatter
+from meta_wip_automation.readme_parser import parse_readme, extract_frontmatter
 
 
 def test_parse_readme():

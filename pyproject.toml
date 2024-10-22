@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "meta-wip-automation"
+version = "0.1.0"
+description = "Automation system for Meta WIP Category management, optimized for neurodivergent workflows"
+authors = ["jayascript <39142547+jayascript@users.noreply.github.com>"]
+license = "GPL-3.0-or-later"
+readme = "README.org"
+packages = [{include = "meta_wip_automation", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+mkdocs = "^1.5.3"
+mkdocs-material = "^9.5.3"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pytest-cov = "^4.1.0"
+black = "^23.9.1"
+isort = "^5.12.0"
+flake8 = "^6.1.0"
+
+[tool.poetry.scripts]
+meta-wip = "meta_wip_automation.main:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = 'black'
+multi_line_output = 3
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "--cov=meta_wip_automation"

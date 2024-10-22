@@ -1,6 +1,6 @@
 import unittest
 from datetime import datetime, timedelta
-from src.project_sorter import (
+from meta_wip_automation.project_sorter import (
     calculate_priority,
     get_recurrence_score,
     ACCOUNTABILITY_SCORES,
