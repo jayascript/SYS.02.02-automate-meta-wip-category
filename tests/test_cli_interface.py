@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 
-import unittest
-from unittest.mock import patch
+import os
 import sys
+import tempfile
+import unittest
+from unittest.mock import patch, mock_open
+
+
 from io import StringIO
+from datetime import datetime
 
 
-from meta_wip_automation.main import main # Assuming your main CLI function is in <package_name>/main.py
+from meta_wip_automation.main import main
 
 
 class TestCLI(unittest.TestCase):
@@ -67,24 +72,75 @@ class TestCLI(unittest.TestCase):
 
 
     @patch('sys.stdout', new_callable=StringIO)
-    def test_cli_valid_option(self, mock_stdout):
-        """
-        Test the CLI's handling of a valid option.
+    def test_sort_with_files(self, mock_stdout):
+        """Test sorting with specified README files."""
+        # Create temporary test files
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.org', delete=False) as f1, \
+             tempfile.NamedTemporaryFile(mode='w', suffix='.org', delete=False) as f2:
 
-        This test checks that the CLI correctly processes a valid option
-        (in this case, a hypothetical --sort option) and produces the
-        expected output.
+            # Write test content to files
+            f1.write(
+                """#+title: Project One
+                #+PROJECT_ID: TST.00.01
+                #+STATUS: active
+                #+URGENCY: now
+                """
+            )
 
-        Args:
-            mock_stdout (StringIO): A mock object to capture system output.
-        """
-        # Simulate calling the script with a valid option
-        sys.argv = ['main.py', '--sort']
+            f2.write(
+                """#+title: Project Two
+                #+PROJECT_ID: TST.00.02
+                #+STATUS: stuck
+                #+URGENCY: soon
+                """
+            )
+
+            f1.flush()
+            f2.flush()
+
+            try:
+                # Test sorting with files
+                sys.argv = ['main.py', '--sort', f1.name, f2.name]
+                main()
+
+                output = mock_stdout.getvalue()
+                # Check that both projects appear in output
+                self.assertIn('Project One', output)
+                self.assertIn('Project Two', output)
+                self.assertIn('TST.00.01', output)
+                self.assertIn('TST.00.02', output)
+
+            finally:
+                # Clean up temporary files
+                os.unlink(f1.name)
+                os.unlink(f2.name)
+
+
+    @patch('sys.stderr', new_callable=StringIO) # Change from stdout to stderr
+    def test_sort_with_nonexistent_file(self, mock_stderr):
+        """Test sorting with a nonexistent file."""
+        nonexistent_file = 'nonexistent.org'
+        sys.argv = ['main.py', '--sort', nonexistent_file]
         main()
+        error_output = mock_stderr.getvalue().lower()
+        self.assertIn('readme file not found', error_output) # Check for specific error
+        self.assertIn(nonexistent_file, error_output) # Check file name is in error
 
-        # Check that the expected output is produced
-        output = mock_stdout.getvalue().strip()
-        self.assertIn('Sorting projects', output)
+    @patch('sys.stderr', new_callable=StringIO) # Change from stdout from stderr
+    def test_sort_with_invalid_content(self, mock_stderr):
+        """Test sorting with invalid file content."""
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.org', delete=False) as f:
+            f.write("Invalid content without proper frontmatter")
+            f.flush()
+            file_path = f.name
+
+            try:
+                sys.argv = ['main.py', '--sort', file_path]
+                main()
+                error_output = mock_stderr.getvalue()
+                self.assertIn(f'Error processing {file_path}', error_output)
+            finally:
+                os.unlink(f.name)
 
 
 if __name__ == '__main__':

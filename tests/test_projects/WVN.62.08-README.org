@@ -1,0 +1,9 @@
+#+title: Analytics Dashboard
+#+PROJECT_ID: WVN.62.08
+#+STATUS: stuck
+#+URGENCY: now
+#+INTEREST: avoiding
+#+ACCOUNTABILITY: imminent
+#+TIME_DISTORTION: balloon
+#+EFFORT: resist
+#+DEPENDENCIES: WVN.62.07

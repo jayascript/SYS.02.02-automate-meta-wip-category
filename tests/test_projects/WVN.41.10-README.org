@@ -1,0 +1,11 @@
+#+title: Monthly BPR Metrics
+#+PROJECT_ID: WVN.41.10
+#+STATUS: active
+#+URGENCY: soon
+#+INTEREST: engaged
+#+ACCOUNTABILITY: looming
+#+TIME_DISTORTION: linear
+#+EFFORT: push
+#+RECURRENCE_INTERVAL: 30
+#+LAST_COMPLETED: 2024-03-01
+#+RECURRENCE_TYPE: monthly
